@@ -11,21 +11,21 @@ import kotlinx.coroutines.withContext
 
 @Dao
 interface TaskDao {
+    //Precisa de Uptade, Deletar, Criar e Procurar
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE) // Atualiza e Insere
+    suspend fun save(task: TaskEntity)
+
+//    @Delete
+//    suspend fun deleteTask(task: TaskEntity)
+
+//    @Query ("DELETE FROM TaskEntity WHERE id = :id")
+//    suspend fun deleteTaskId(id:Int)
 
     @Query("SELECT * FROM TaskEntity")
-    fun findAll(): Flow<List<TaskEntity>>
+    fun getAllTasksEntries():List<TaskEntity>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun save (task: TaskEntity)
-
-    @Query("DELETE FROM TaskEntity WHERE id = :id")
-    suspend fun deleteTask(id: String)
-
-    @Update
-    suspend fun updateTask(task: TaskEntity)
-
-    @Query("Select * FROM TaskEntity WHERE id = :id")
-    fun getTaskById(id:String): Flow<List<TaskEntity>>
-
+//    @Update()
+//    suspend fun updateTask(task: TaskEntity)
 
 }

@@ -7,16 +7,18 @@ import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-val appModule = module {
-    viewModelOf (::HomeViewModel)
-    singleOf(::TaskRepository)
+val appModules = module {
+    viewModelOf(::NewTaskViewModel)
+   // viewModelOf(::TasksListViewModel)
 }
 
 val storageModule = module {
+    val databaseName = "task-database"
+    singleOf(::TaskRepository)
     single {
         Room.databaseBuilder(
             androidContext(),
-            TaskDatabase::class.java, "task-database.db"
+            TaskDatabase::class.java, databaseName
         ).build()
     }
     single {

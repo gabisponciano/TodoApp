@@ -1,39 +1,53 @@
 package com.gabrielaponciano.todoapp.repository
 
+
 import com.gabrielaponciano.todoapp.db.TaskDao
 import com.gabrielaponciano.todoapp.db.TaskEntity
 import com.gabrielaponciano.todoapp.model.TaskModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
-class TaskRepository (private val dao: TaskDao):TaskRepositoryInterface{
-    override fun findAll(): Flow<List<TaskEntity>> {
-        return dao.findAll()
-    }
+class TaskRepository(
+    private val dao: TaskDao
+){
+//    val alltasks get() = dao.getAllTasksEntries()
 
-    override suspend fun save(task: TaskModel) {
+    suspend fun save(task: TaskModel) = withContext(IO) {
         dao.save(task.toEntity())
     }
 
-    override suspend fun deleteTask(id: String) {
-        dao.deleteTask(id)
+
+//    suspend fun deleteTask(task: TaskModel) = withContext(IO){
+//        dao.deleteTask(task.toEntity())
+//    }
+//
+//    suspend fun deleteTaskId(id: Int) = withContext(IO){
+//        dao.deleteTaskId(id)
+//    }
+
+    suspend fun findAllList(): List<TaskModel> = withContext(IO){
+        return@withContext dao.getAllTasksEntries().map { it.toTask() }
     }
 
-    override suspend fun updateTask(task: TaskModel) {
-        TODO("Not yet implemented")
-    }
 
-    override fun getTaskById(id: String){
-        dao.getTaskById(id)
-    }
-
+//    suspend fun updateTask(task: TaskModel) {
+//        dao.updateTask(task.toEntity())
+//    }
 }
 
 fun TaskModel.toEntity() = TaskEntity(
     id = this.id,
     title = this.title,
     description = this.description,
-    date = this.date,
     status = this.status
+)
+
+fun TaskEntity.toTask() = TaskModel(
+    id = this.id,
+    title = this.title,
+    description = this.description,
+    status = this.status
+
 )

@@ -9,15 +9,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.gabrielaponciano.todoapp.ui.screens.HomeScreen
 import com.gabrielaponciano.todoapp.ui.screens.NewTaskScreen
 import com.gabrielaponciano.todoapp.ui.theme.TodoAppTheme
+import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,31 +31,24 @@ class MainActivity : ComponentActivity() {
             TodoAppTheme {
                 val navController = rememberNavController()
                 Navigation(navController)
-
-                }
             }
         }
     }
-
-object Routes {
-    const val HOME = "home"
-    const val CHANGE_TASK = "change"
-    const val NEW_TASK = "task"
-
 }
 
 @Composable
-fun Navigation(navController: NavHostController){
+fun Navigation(navController:NavHostController){
 //    val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Routes.HOME){
-        composable(Routes.HOME){
-            HomeScreen(navController)
+    NavHost(navController = navController, startDestination = "task"){
+        composable("home"){
+            //homeScreen(navController)
         }
-        composable(Routes.NEW_TASK){
+        composable("task"){
             NewTaskScreen(navController)
         }
-        composable(Routes.CHANGE_TASK){
+        composable("change"){
 
         }
     }
 }
+

@@ -2,11 +2,9 @@ package com.gabrielaponciano.todoapp.model
 
 import java.util.UUID
 
-data class TaskModel (
-    val id: Int = 0,
+class TaskModel (
+    val id: String,
     val title: String,
     val description: String,
-    val status: String,
-    val date:Int
-
+    val status: String
 )
