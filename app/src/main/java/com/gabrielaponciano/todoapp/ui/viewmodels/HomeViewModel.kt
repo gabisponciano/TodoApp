@@ -8,15 +8,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gabrielaponciano.todoapp.model.TaskModel
 import com.gabrielaponciano.todoapp.repository.TaskRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.UUID
 
 class HomeViewModel(private val repository: TaskRepository): ViewModel() {
+
+    private val _listAll = MutableStateFlow<List<TaskModel>>(emptyList())
+    val listAll: StateFlow<List<TaskModel>> = _listAll
+
     var itemSelection by mutableIntStateOf(1)
 
-    var listAllTask by mutableStateOf<Array<TaskModel>?>(null)
 
-    private val tempList = mutableListOf<TaskModel>()
+//    var listAllTask by mutableStateOf<Array<TaskModel>?>(null)
+
+//    private val tempList = mutableListOf<TaskModel>()
 
     init {
         viewModelScope.launch {
@@ -28,11 +35,12 @@ class HomeViewModel(private val repository: TaskRepository): ViewModel() {
     private suspend fun getAllTasks(){
 
             try {
-                val listTaskResult = repository.findAllList()
-                for (i in listTaskResult.indices){
-                    tempList.add(listTaskResult[i])
-                }
-                listAllTask = tempList.toTypedArray()
+                _listAll.value = repository.findAllList()
+//                val listTaskResult = repository.findAllList()
+//                for (i in listTaskResult.indices){
+//                    tempList.add(listTaskResult[i])
+//                }
+//                listAllTask = tempList.toTypedArray()
             }catch (e:Exception){
                 println(e.message)
             }
